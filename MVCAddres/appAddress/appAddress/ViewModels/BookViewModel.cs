@@ -3,6 +3,8 @@ namespace appAddress.ViewModels
 {
     using appAddress.Models;
     using appAddress.Services;
+    using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Xamarin.Forms;
 
@@ -58,6 +60,27 @@ namespace appAddress.ViewModels
                     );
                 return;
             }
+            MainViewModel mainViewModel = MainViewModel.GetInstance();
+            mainViewModel.ListBook = (List<Book>)response.Result;
+
+            this.Books = new ObservableCollection<Book>(this.ToBookCollect());
+
+        }
+
+        private IEnumerable<Book> ToBookCollect()
+        {
+            ObservableCollection<Book> collect = new ObservableCollection<Book>();
+            MainViewModel main = MainViewModel.GetInstance();
+            foreach (var lista in main.ListBook)
+            {
+                Book book = new Book();
+                book.BookID = lista.BookID;
+                book.Name = lista.Name;
+                book.Type = lista.Type;
+                book.Contact = lista.Contact;
+                collect.Add(book);
+            }
+            return (collect);
         }
 
         #endregion
